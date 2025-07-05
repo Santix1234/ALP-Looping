@@ -68,19 +68,26 @@ class PerformanceMetrics:
         """
         return self.total_execution_time / max(1, self.total_iterations)
     
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self, include_system_metrics: bool = True) -> Dict[str, Any]:
         """
-        Retrieve all collected metrics.
+        Retrieve collected metrics.
+        
+        Args:
+            include_system_metrics: Whether to include system metrics like iterations and time
         
         Returns:
             Comprehensive dictionary of performance metrics
         """
-        metrics = {
-            'total_iterations': self.total_iterations,
-            'total_execution_time': self.total_execution_time,
-            'average_iteration_time': self.average_iteration_time,
-            **self._custom_metrics
-        }
+        metrics = {}
+        
+        if include_system_metrics:
+            metrics.update({
+                'total_iterations': self.total_iterations,
+                'total_execution_time': self.total_execution_time,
+                'average_iteration_time': self.average_iteration_time
+            })
+        
+        metrics.update(self._custom_metrics)
         return metrics
     
     def reset(self) -> None:
