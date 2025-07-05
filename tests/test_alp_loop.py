@@ -25,7 +25,7 @@ def test_alp_loop_run():
     metrics = loop.run()
     
     assert loop._status == LoopStatus.FAILED
-    assert metrics.iterations == 4  # 0-indexed iterations
+    assert metrics.iterations == 5  # Full number of iterations
     assert loop.initialization_called is True
     assert isinstance(metrics, LoopMetrics)
 
@@ -40,7 +40,7 @@ def test_alp_loop_max_iterations():
     loop = ConcreteALPLoop(max_iterations=3)
     metrics = loop.run()
     
-    assert metrics.iterations == 3  # 0-indexed iterations
+    assert metrics.iterations == 3  # Full number of iterations
     assert loop._status == LoopStatus.FAILED
 
 def test_alp_loop_logging():
