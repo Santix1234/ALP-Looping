@@ -49,8 +49,8 @@ class ConfigValidator:
             if key not in config:
                 raise ConfigValidationError(f"Missing required configuration key: {key}")
         
-        # Validate learning mode
-        ConfigValidator._validate_learning_mode(config.get('learning_mode'))
+        # Validate learning mode first
+        config['learning_mode'] = ConfigValidator._validate_learning_mode(config.get('learning_mode'))
         
         # Validate numeric parameters
         ConfigValidator._validate_numeric_config(config)
@@ -102,9 +102,6 @@ class ConfigValidator:
         
         for param, (validator, error_msg) in numeric_validations.items():
             value = config.get(param)
-            
-            if value is None:
-                continue
             
             try:
                 numeric_value = float(value)
