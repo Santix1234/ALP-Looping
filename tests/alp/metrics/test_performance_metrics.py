@@ -70,7 +70,7 @@ def test_reset_metrics():
     
     assert metrics.total_iterations == 0
     assert metrics.total_execution_time == 0.0
-    assert metrics.get_metrics() == {}
+    assert metrics.get_metrics(include_system_metrics=False) == {}
 
 def test_start_iteration_error():
     """Test error handling for ending an iteration without starting."""
