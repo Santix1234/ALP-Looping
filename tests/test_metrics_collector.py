@@ -47,7 +47,7 @@ def test_metric_average_calculation():
     collector.record_metric("error_rate", 0.3)
     
     avg = collector.calculate_metric_average("error_rate")
-    assert avg == 0.2  # (0.1 + 0.2 + 0.3) / 3
+    assert avg == pytest.approx(0.2)  # Use approx for floating-point comparison
 
 def test_metric_types():
     """Test recording different metric types."""
