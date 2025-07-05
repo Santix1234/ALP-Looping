@@ -52,8 +52,8 @@ class AdaptiveLearningProcessLoop(ABC):
         self._logger = logger or logging.getLogger(self.__class__.__name__)
         
         # Core loop state tracking
-        self._status: LoopStatus = LoopStatus.INITIALIZED
-        self._metrics: LoopMetrics = LoopMetrics()
+        self._status = LoopStatus.INITIALIZED
+        self._metrics = LoopMetrics()
         
         # Initialize logging
         self._configure_logging()
@@ -113,9 +113,10 @@ class AdaptiveLearningProcessLoop(ABC):
             self._initialize()
             
             # Main learning loop
+            should_continue = True
             while (
                 self._metrics.iterations < self._max_iterations and 
-                self._status == LoopStatus.RUNNING
+                should_continue
             ):
                 should_continue = self._iteration()
                 
@@ -129,7 +130,7 @@ class AdaptiveLearningProcessLoop(ABC):
             # Mark loop completion
             self._status = (
                 LoopStatus.COMPLETED 
-                if self._metrics.iterations < self._max_iterations 
+                if should_continue 
                 else LoopStatus.FAILED
             )
             
@@ -149,6 +150,10 @@ class AdaptiveLearningProcessLoop(ABC):
         if self._status == LoopStatus.RUNNING:
             self._status = LoopStatus.PAUSED
             self._logger.info("Learning loop paused")
+        elif self._status == LoopStatus.INITIALIZED:
+            # Allow pause from initialized state
+            self._status = LoopStatus.PAUSED
+            self._logger.info("Learning loop paused before running")
     
     def resume(self):
         """
